@@ -1,0 +1,507 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+public class InterviewQuestions1 {
+
+	//using sorting-> O(nlogn) time, O(1) space.
+	public static int mostFrequent(int arr[]) 
+    {
+		//say at least 1 element, otherwise we can return -1 or MinInteger if needed
+		int currentMax=0, finalMax=0, finalNumber=arr[0];
+		
+		Arrays.sort(arr);
+		
+		for(int i=0; i<arr.length-1; i++)
+		{
+			if(arr[i]==arr[i+1])
+				currentMax++;
+				else {
+					if(currentMax>finalMax)
+						{
+						finalMax=currentMax;
+						finalNumber = arr[i];
+						}
+					currentMax=0;
+				}
+		}
+		
+		return finalNumber;
+    
+    }
+
+
+	//using hashing -> O(n) time and space
+	public static int mostFrequentHashed(int arr[]) 
+	{ 
+      
+    // Insert all elements in hash 
+    Map<Integer, Integer> hp = 
+           new HashMap<Integer, Integer>(); 
+      
+    for(int i = 0; i < arr.length; i++) 
+    { 
+        int key = arr[i]; 
+        if(hp.containsKey(key)) 
+        { 
+            int freq = hp.get(key); 
+            freq++; 
+            hp.put(key, freq); 
+        } 
+        else
+        { 
+            hp.put(key, 1); 
+        } 
+    } 
+      
+    // find max frequency. 
+    int max_count = 0, res = -1; 
+      
+    for(Entry<Integer, Integer> val : hp.entrySet()) 
+    { 
+        if (max_count < val.getValue()) 
+        { 
+            res = val.getKey(); 
+            max_count = val.getValue(); 
+        } 
+    } 
+      
+    return res; 
+	
+	} 
+
+	public static int[] commonElem(int[] arr1, int[] arr2) {
+		
+		ArrayList<Integer> temp = new ArrayList<Integer>(0);
+		
+		int index1=0, index2=0;
+		
+		while(index1<arr1.length && index2<arr2.length)	
+		{
+			if(arr1[index1]>arr2[index2])
+				index2++;
+			else if(arr1[index1]<arr2[index2])
+				index1++;
+			else	//equals
+				{
+				temp.add(arr1[index1++]);
+				index2++;
+				}
+		}	
+		
+		int[] arrTemp = new int[temp.size()];
+
+		for(int i=0; i<arrTemp.length ; i++)
+			arrTemp[i] = temp.remove(0);
+		
+		return arrTemp;
+	}
+
+	public static boolean isRotationOf(int[] arr1 , int[] arr2) {
+		
+        //Check length of arrays
+        if(arr1.length != arr2.length)
+            return false;
+
+		int index1=0,index2=0, indexToReach=0, startingIndex=0;
+		
+		for( ; index1<arr1.length ; index1++)
+		{
+			if(arr1[index1] == arr2[index2])
+			{
+				startingIndex = index1;
+				while(index1<arr1.length && index2<arr2.length &&  arr1[index1] == arr2[index2])
+					{
+					index1++;index2++;
+					}
+				
+				if(index1==arr1.length)
+				{
+				//	System.out.println("\n" + index1 + "\t" + index2);
+					indexToReach = arr1.length - index2;
+					index1=0;
+
+					while(index1<indexToReach && index2<arr2.length &&  arr1[index1] == arr2[index2])
+					{
+					index1++;index2++;
+					}
+
+					if(index2 == arr2.length)
+						return true;
+				}
+			index1=startingIndex;
+			index2=0;
+			}
+		}
+		
+		return false;		
+	}
+
+	/*another approache is to duplicate the second and search for the first as a sequence in the other
+	public static boolean isRotationOf2(int[] arr1 , int[] arr2) {
+
+		int[] temp = new int[arr2.length*2];
+		
+		for(int i=0 ; i<arr2.length; i++)
+			temp[i] = arr2[i];
+		for(int i=0 ; i<arr2.length; i++)
+			temp[arr2.length+i] = arr2[i];
+	
+		int index1=0, index2=0;
+		
+		while(index1<arr1.length)
+		{
+			while(arr1[index1] == temp[index2])
+				index1++;
+				
+		}
+	}
+	
+	*/
+	
+	
+	
+	// Definition for a Node.
+	public static class Node {
+	    int val;
+	    Node next;
+	    Node random;
+
+	    public Node(int val) {
+	        this.val = val;
+	        this.next = null;
+	        this.random = null;
+	    }
+	}
+	
+	    public static Node copyRandomList(Node head) {
+	        
+	        if(head==null){
+	            return null;
+	        }
+	        
+	        // Space O(1)
+	        
+	        Node current = head;
+	        while(current!=null){
+	            // insert the new copied node to original linked list
+	            Node next = current.next;
+	            current.next = new Node(current.val);
+	            current.next.next = next;
+	            
+	            current = next;
+	        }
+	        
+	        current = head;
+	        while(current!=null){
+	            if(current.random!=null){
+	                current.next.random = current.random.next;
+	            }
+	            current = current.next.next;
+	        }
+	        
+	        current = head;
+	        Node res = head.next;
+	        while(current!=null){
+	            // eg: A->A'->B->B'...
+
+	            // next = B
+	            Node next = current.next.next;
+	            
+	            if(next!=null){
+	                // A'->B' ...
+	                current.next.next = next.next;
+	            }
+	            // A->B ...
+	            current.next = next;
+	            
+	            current = next;
+	        }
+	        
+	        return res;
+	    }
+	    
+	    public static int mul(int a, int b) {
+	    	if(a<b)
+	    		return mulAid(b,a);
+	    		else return mulAid(a,b);
+	    }
+	    public static int mulAid(int a, int b) {
+	    	
+	    	if(b==0)
+	    		return 0;
+	    	
+	    	return a + mulAid(a,b-1);
+	    }
+	    
+	    
+	    public static boolean patternInsString(String s,String p) {
+	    	
+	    	char[] charArrayS = new char[s.length()];
+	    	charArrayS = s.toCharArray();
+	    	
+	    	char[] charArrayP = new char[p.length()];
+	    	charArrayP = p.toCharArray();
+	    	
+	    	for(int sIndex=0, pIndex=0; sIndex<s.length() ; sIndex++)
+	    	{
+	    		pIndex=0;
+	    		while(
+	    				( charArrayS[sIndex] == charArrayP[pIndex] ) ||
+	    				(charArrayS[pIndex] == '.' ) ||
+	    				( charArrayS[pIndex] == '*' && charArrayS[sIndex] == '0' )  ||
+	    				( charArrayS[pIndex] == '*' && sIndex>0 && charArrayS[sIndex] == charArrayS[sIndex-1] )
+	    				)
+	    			{
+	    			sIndex++; pIndex++;
+	    			if(pIndex==charArrayP.length)
+	       				return true;
+	    			}
+	    	}
+	    	
+	    	return false;
+	    	
+	    	
+	    }
+	    
+	    public static boolean isMatch(String s, String p) {
+	        
+	    	char[] charArrayS = new char[s.length()];
+	    	charArrayS = s.toCharArray();
+	    	
+	    	char[] charArrayP = new char[p.length()];
+	    	charArrayP = p.toCharArray();
+	    	
+
+	    		int sIndex=0, pIndex=0;
+	    		
+	    		if(p.length()>s.length() )
+	    			{
+	    			
+	    			pIndex+=p.length()-s.length();
+	    			
+	    			char[] temp = new char[s.length()];
+	    			
+	    			for(int i=0 ; i<s.length() ; i++)
+	    			{
+	    				temp[i] = charArrayP[i+pIndex];
+	    			}
+	    			
+	    			Map<Character, Integer> stringHash = new HashMap<Character, Integer>();
+	    			for (char ch : s.toCharArray())
+	    			    stringHash.put(ch, stringHash.containsKey(ch) ? (stringHash.get(ch) + 1) : 1);
+	    			
+	    			Map<Character, Integer> pHash = new HashMap<Character, Integer>();
+	    			for (char ch : s.toCharArray())
+	    				pHash.put(ch, pHash.containsKey(ch) ? (pHash.get(ch) + 1) : 1);
+	    			
+	    			}
+	    			
+	    		
+	    		
+	    		while(
+                        ( sIndex<charArrayS.length && pIndex<charArrayP.length ) &&
+	                        (
+		    				( charArrayS[sIndex] == charArrayP[pIndex] ) ||
+		    				(charArrayP[pIndex] == '.' ) ||
+		    				( charArrayP[pIndex] == '*' && charArrayS[sIndex] == '0' )  ||
+		    				( charArrayP[pIndex] == '*' && sIndex>0 && charArrayS[sIndex] == charArrayP[pIndex-1] )
+	                        )
+	    			)
+	    			{
+	    			sIndex++; pIndex++;
+	    			if(pIndex==charArrayP.length && sIndex == charArrayS.length)
+	       				return true;
+	    			}
+	    	
+	    	
+	    	return false;
+	    	
+    }
+	    
+	    public static int mutants(int N , int K, int[] arr) {
+	    	
+	    	if(N!=arr.length || N%K!=0)
+	    		return -1;
+	    	
+	    	Arrays.sort(arr);
+	    	
+	    	int numOfLists = N/K;
+	    	
+	    	List<int[]> intList = new ArrayList<int[]>(0);
+	    	
+	        ArrayList<Integer>[] resultLists = new ArrayList[numOfLists]; 
+	        
+	        // initializing 
+	        for (int i = 0; i < numOfLists; i++) { 
+	        	resultLists[i] = new ArrayList<Integer>(0); 
+	        } 
+	    	
+	    	
+	    	intList.add(new int[2]);
+	    	intList.get(0)[0]=arr[0];
+	    	intList.get(0)[1]=1;
+	    	System.out.println();
+	    	for (int i=1; i<arr.length ; i++)
+	    	{
+	    		System.out.print(arr[i] + "\t");
+	    		if(intList.get(intList.size()-1)[0] != arr[i])
+	    	    {
+	    	    	int[] temp = new int[2];
+	    	    	temp[0]=arr[i];
+	    	    	temp[1] =1;
+	    	    	intList.add(temp);
+	    	    }else {
+	    	    	intList.get(intList.size()-1)[1]++;
+	    	    }
+	    	}
+	    	System.out.println("\n\n");
+
+	    	
+			Collections.sort(intList, (i1, i2) -> Integer.compare(i1[0], i2[0]));
+			Collections.sort(intList, (i1, i2) -> Integer.compare(i1[1], i2[1]));
+			Collections.reverse(intList);
+
+
+	    	for(int[] mutant : intList)
+    	 		if(mutant[1]>numOfLists)
+    	 			return -1;
+	    	
+	    	int listIndex=0;
+	    	int side=0;
+	    	
+	    	while(!intList.isEmpty()) {
+	    		{
+	    		if(side%2==0)
+	    		{
+	    	    	int mutant=0;
+		    		System.out.println("\nZUGI: \n" + intList.get(mutant)[0] );
+
+	    			while(resultLists[listIndex].size()<K)
+   	    				{
+	    				if(intList.get(mutant)[1]==0)
+	    					intList.remove(mutant);
+	    				else {
+				    		System.out.print(intList.get(mutant)[0] + "\t");
+	    					resultLists[listIndex].add(intList.get(mutant)[0]);
+		    				intList.get(mutant)[1]--;
+		    				if(intList.get(mutant)[1]==0)
+		    					intList.remove(mutant);
+		    				else {
+			    				mutant++;
+			    				}
+		    				}
+   	    				}
+	    		}else {
+	    			
+	    	    	int mutant=intList.size()-1;
+		    		System.out.println("\nE-ZUGI: \n" + intList.get(mutant)[0]);
+
+	    			while(resultLists[listIndex].size()<K)
+   	    				{
+	    				if(intList.get(mutant)[1]==0)
+	    					intList.remove(mutant);
+	    				else {
+	    					System.out.print(intList.get(mutant)[0] + "\t");
+	    					resultLists[listIndex].add(intList.get(mutant)[0]);
+		    				intList.get(mutant)[1]--;
+		    				if(intList.get(mutant)[1]==0)
+		    					intList.remove(mutant);
+		    				}
+	    				mutant--;
+   	    				}
+   	    				}
+	    		side++;
+	    		listIndex++;
+	    			
+	    		}
+	    	}
+	    	
+	    	int res=0;
+
+	    	for(int i=0; i<resultLists.length  ; i++)
+	    	{
+	    		Collections.sort(resultLists[i]);
+	    		System.out.println();
+	    		for(int item : resultLists[i])
+	    			System.out.print(item + "\t");
+	    		int tail = resultLists[i].get(0);
+	    		int lead = resultLists[i].get(resultLists[i].size()-1);
+            	System.out.println("\n" + tail + "\t" + lead +  "\t" + res + "\n");
+	    		res+= Math.abs(lead-tail);
+	    	}
+	    	
+	    	return res;
+	    	
+	    }
+
+	
+    public static int findMinPositiveOrg(int[] A) {
+        // write your code in Java SE 8
+        //naive approcahe
+        int min=1;
+        Arrays.sort(A);             //O(nlogn)
+        for(int i=0 ; i<A.length ; i++){    //O(n)
+            if(A[i] > min)
+                return min;
+                else if(A[i]==min)
+                min++;
+                
+            if(i==A.length)
+                return A[A.length-1]+1;
+        }
+        return min;
+    }
+
+public static int findMinPositive(int[] A) {
+    // write your code in Java SE 8
+    //naive approcahe
+    int N=100000;
+    int SIZE = 1000000;
+    int[] hashTable = new int[SIZE*2+1];    //O(1)?
+    
+    for(int i=0 ; i<A.length ; i++)   //O(n)
+        hashTable[A[i]+SIZE] = 1;
+
+     for(int i=SIZE+1 ; i<hashTable.length ; i++)   //O(n)
+            {
+    	 if( hashTable[i]!=1)
+              return i-SIZE;
+    	 if(i==hashTable.length)
+    		 return A[hashTable.length] - SIZE +1;
+            }
+    return 1;
+                
+
+}
+
+public static double findSquareRoot(int n) {
+	
+	int i=1;
+	double mid=1;
+	
+	while(i*i<n)
+		i++;
+	
+	if(i*i==n)
+		return i;
+	
+	mid=i-0.5;
+	for(double k=1; k<10000; k++)
+	{
+	if(mid*mid>n)
+		mid=mid-(1/(k*2));
+	else mid=mid+(1/(k*2));
+	}
+	
+	return mid;
+
+	
+}
+
+
+}//end of class
