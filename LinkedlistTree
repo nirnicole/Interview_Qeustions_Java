@@ -1,0 +1,86 @@
+
+public class LinkedlistTree {
+	
+	// A Binary Tree Node  
+	static void printNodes(Node root)  
+	{  
+	    // If node is null, return  
+	    if (root == null)  
+	        return;  
+	    	  
+	    // If left child exists, check for leaf  
+	    // recursively  
+	    if (root.left != null)  
+	    	printNodes(root.left);  
+	  
+        System.out.print( root.data +" ");  
+
+	    // If right child exists, check for leaf  
+	    // recursively  
+	    if (root.right != null)  
+	    	printNodes(root.right);  
+	    
+	}  
+	    	  
+		
+	// Function to print leaf  
+	// nodes from left to right  
+	static void printLeafNodes(Node root)  
+	{  
+		
+	    // If node is null, return  
+	    if (root == null)  
+	        return;  
+	  
+	    // If node is leaf node, print its data  
+	    if (root.left == null && root.right == null)  
+	    {  
+	        System.out.print( root.data +" ");  
+	        return;  
+	    }  
+
+	    // If left child exists, check for leaf  
+	    // recursively  
+	    if (root.left != null)  
+	        printLeafNodes(root.left);  
+	    
+	    // If right child exists, check for leaf  
+	    // recursively  
+	    if (root.right != null)  
+	        printLeafNodes(root.right);  
+	  
+
+	}  
+	    
+	static Node prevNode=null;
+
+	static void connectLeafs(Node root)  
+	{  
+		
+	    // If node is null, return  
+	    if (root == null)  
+	        return;  
+	    
+	    // If node is leaf node, print its data  
+	    if (root.left == null && root.right == null)  
+	    {  
+	        if(prevNode!=null)
+	        	prevNode.right = root;
+	        prevNode=root;
+	        return;  
+	    }  
+
+	    // If left child exists, check for leaf  
+	    // recursively  
+	    if (root.left != null)  
+	    	connectLeafs(root.left);  
+	    
+	    // If right child exists, check for leaf  
+	    // recursively  
+	    if (root.right != null)  
+	    	connectLeafs(root.right);  
+	  
+
+	}  
+	
+}
