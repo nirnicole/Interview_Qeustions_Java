@@ -1,0 +1,80 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.Stack;
+
+public class Recursion {
+
+	
+    //ex2 - prints to the screen all the combinations of 1 and 2 that sums up to the value inserted.
+    public static void options(int n)
+    {
+    int[] history = new int[n];
+    options(n,history,0);
+    }
+    
+    private static void options(int n, int[] history,int i)
+    {
+        if(n==0)
+        {
+            printHistory(history,0, i);
+            System.out.println("\n" + i + "\n");
+            System.out.println();
+        }
+        if(n>0)
+        {
+            history[i] = 1;
+            options(n-1,history,i+1);
+            history[i] = 2;
+            options(n-2,history,i+1);
+        }
+    }
+    
+    public static void printHistory(int[] history,int from,int to) {
+        if (from < to) {
+            System.out.print(history[from] + "\t");
+            printHistory(history, from + 1, to);
+        }
+    }
+    
+    //return all permutation
+    public static void 
+    permutations(Set<Integer> items, Stack<Integer> permutation, int size) {
+
+        /* permutation stack has become equal to size that we require */
+        if(permutation.size() == size) {
+            /* print the permutation */
+            System.out.println(Arrays.toString(permutation.toArray(new Integer[0])));
+        }
+
+        /* items available for permutation */
+        Integer[] availableItems = items.toArray(new Integer[0]);
+        for(Integer i : availableItems) {
+            /* add current item */
+            permutation.push(i);
+
+            /* remove item from available item set */
+            items.remove(i);
+
+            /* pass it on for next permutation */
+            permutations(items, permutation, size);
+
+            /* pop and put the removed item back */
+            items.add(permutation.pop());
+        }
+    }
+
+	      
+    //fibonacci without DP
+    public static int simpleFibonacci(int n) {
+    	
+    	int res=0;
+    	
+    	if(n==1 || n==2)
+    		res = 1;
+    	else
+    		res = simpleFibonacci(n-1) + simpleFibonacci(n-2);
+    	
+    	return res;
+    }
+}
