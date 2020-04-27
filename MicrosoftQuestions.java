@@ -7,7 +7,106 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+//writen for JAVA8
 public class MicrosoftQuestions {
+
+	//how many 'a' chars we can insert without 3 a consecutive
+	public static int maxAInserts(String S) {
+		
+		if(S==null)
+		return -1;
+
+		if(S.equals(""))
+			return 2;
+
+		int acounter = 0;
+		int strSize = S.length();
+		int result = 0;
+
+		S.toLowerCase();
+
+		for(int i=0;i<strSize;i++) {
+			char c = S.charAt(i);
+			if(c == 'a')
+				{
+				acounter++;
+				if(acounter == 3) return -1;
+				}
+			else {
+				result += 2;
+				result -= acounter;
+				acounter = 0;
+			}
+		}
+
+		if(S.charAt(strSize - 1) != 'a')
+				result+=2;
+			else
+			{
+				result += 2;
+				result -= acounter;
+			}
+			return result;
+		}
+
+	  //maximum value when inserting '5' digit
+	public static int maxPossibleValue(int num) {
+
+		final int K=5;
+		char[] chars = ("" + num).toCharArray();
+		    int index=0;
+
+		    if(num>=0)
+			    while(index<chars.length && (K+48)<(int)chars[index] ) index++;
+		    else 
+			{
+			index=1;	//skip the minus
+			    while(index<chars.length && (K+48)>(int)chars[index] ) index++;
+			}  
+
+		    char[] result = new char[chars.length+1];
+
+		    for(int i=0,charsIndex=0 ;i<result.length;i++,charsIndex++)
+		    {
+			if(i==index)
+				{
+				result[i] = K+48;
+				charsIndex--;
+				}
+			else result[i] = chars[charsIndex];
+		    }
+
+		    return Integer.parseInt(String.valueOf(result));
+	}
+
+	//K days after given one.
+	public  static String dayOfTheWeek(String S, int K) {
+		// write your code in Java SE 8
+
+		 if(K<0 || K>500)
+			 return "Error: invalid K value";
+
+		 String[] week = new String[] {"Mon", "Tue", "Wed", "Thu", "Fri","Sat", "Sun"};
+		 final int DAYS_WEEK=7;
+		 boolean error=true;
+
+		 for(String dayCheck : week)
+			 if(dayCheck.equalsIgnoreCase(S))
+				 error=false;
+
+		 if(error)
+			 return "Error: invalid Day value";
+
+		 Map<String, Integer> map = new HashMap<>();
+
+		 for( int day=0; day<week.length ; day++)
+			 map.put(week[day], day);
+
+		 int resultDay = (map.get(S) + K) % DAYS_WEEK;
+
+		 return week[resultDay];
+		}
+	
 
     //Given an integer n, return any array containing n unique integers such that they add up to 0.
     public int[] sumZero(int n) {
