@@ -8,6 +8,86 @@ import java.util.Map.Entry;
 
 public class InterviewQuestions1 {
 
+	// JAVA Code for Search in a row wise and 
+	// column wise sorted matrix 	  
+	    /* Searches the element x in mat[][]. If the  
+	element is found, then prints its position  
+	and returns true, otherwise prints "not found" 
+	and returns false */
+	    public static void search(int[][] mat, int n, int x) 
+	    { 
+	  
+	        int i = 0, j = n - 1; // set indexes for top right 
+	        // element 
+	  
+	        while (i < n && j >= 0) { 
+	            if (mat[i][j] == x) { 
+	                System.out.print("n Found at " + i + " " + j); 
+	                return; 
+	            } 
+	            if (mat[i][j] > x) 
+	                j--; 
+	            else // if mat[i][j] < x 
+	                i++; 
+	        } 
+	  
+	        System.out.print("n Element not found"); 
+	        return; // if ( i==n || j== -1 ) 
+	    } 
+	
+	public static int maxDiffBetweenVAlues(int[] arr) {
+		
+        int max_diff = arr[1] - arr[0]; 
+        int min_element = arr[0]; 
+        int i; 
+        for (i = 1; i < arr.length; i++)  
+        { 
+            if (arr[i] - min_element > max_diff) 
+                max_diff = arr[i] - min_element; 
+            if (arr[i] < min_element) 
+                min_element = arr[i]; 
+        } 
+        return max_diff; 
+	}
+	
+	//חיפוש 3 איברים ממשיים שסכומם z במערך ממוין A  (O(n^2))
+	//we serch for x+y+z = w
+	//for every z we will look for a pair x,y such as  x+y = w-z that are not z itself
+	//x->l (left index)  y-> r (right)
+	public static int[] threeSum(int[]A ,int sum) {
+		
+		int l=0,r=0,z=0;
+				
+        /* Sort the elements */
+        Arrays.sort(A); //O(nlogn)
+  
+        /* Now look for the two candidates  
+        in the sorted array*/
+        l = 0; 
+        r = A.length - 1; 
+		for(z=0; z<A.length; z++)	//O(n) * O(n) of the while loop =>O(n^2)
+			{
+	        while (l < r) 
+	        	{
+	        	if(l==z)	//skip z
+	        		l++;
+	        	else if(r==z)	//skip z
+	        		r++;
+	        	else
+		        	{ 
+		            if (A[l] + A[r] == sum - A[z]) 
+		                return new int[]{A[l],A[r],A[z]};
+		            else if (A[l] + A[r] < sum) 
+		                l++; 
+		            else // A[i] + A[j] > sum 
+		                r--; 
+		        	} 
+	        	}
+			}
+        
+		return null;
+	}
+
 	//using sorting-> O(nlogn) time, O(1) space.
 	public static int mostFrequent(int arr[]) 
     {
